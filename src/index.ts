@@ -1,5 +1,9 @@
 import { Client } from 'whatsapp-web.js';
-import qrcode from 'qrcode-terminal';
+// import qrcode from 'qrcode-terminal';
+import qrcode from 'qrcode';
+import express from 'express';
+
+const app = express();
 import {getReadSheet} from './google.api';
 import { verificaAgenda, converterTextoParaWhatsApp, getAgendaAtual } from './converter-agenda';
 
@@ -11,7 +15,25 @@ const client = new Client({
   });
 
 client.on('qr', (qr) => {
-    qrcode.generate(qr, { small: true });
+    // qrcode.generate(qr, { small: true });
+    qrcode.toDataURL(qr, (err, url) => {
+        if (err) {
+          console.error("Erro ao gerar o QR Code", err);
+        } else {
+          // Exibe o QR Code em uma página web
+          app.get('/', (req, res) => {
+            res.send(`
+              <h1>Escaneie o QR Code</h1>
+              <img src="${url}" alt="QR Code" />
+            `);
+          });
+    
+          // Inicia o servidor na porta 3001
+          app.listen(3001, () => {
+            console.log('Servidor rodando em http://localhost:3000');
+          });
+        }
+      });
 });
 
 client.on('ready', () => {
