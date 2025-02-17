@@ -1,0 +1,5 @@
+node_modules
+.env
+.wwebjs_cache
+dist
+jogos-independente-c4f8c1ec820c.json
