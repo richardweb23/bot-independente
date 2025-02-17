@@ -13,31 +13,37 @@ const client = new Client({
       args: ['--no-sandbox', '--disable-setuid-sandbox'] // Opções do Puppeteer
     }
   });
+  let qrGenerated = false;
 
-client.on('qr', (qr) => {
-    // qrcode.generate(qr, { small: true });
-    qrcode.toDataURL(qr, (err, url) => {
+  client.on('qr', (qr) => {
+    if (!qrGenerated) {  // Verifica se o QR Code já foi gerado
+      qrcode.toDataURL(qr, (err, url) => {
         if (err) {
           console.error("Erro ao gerar o QR Code", err);
         } else {
-          // Exibe o QR Code em uma página web
+          // Exibe o QR Code na página apenas se não tiver sido exibido antes
           app.get('/', (req, res) => {
             res.send(`
               <h1>Escaneie o QR Code</h1>
               <img src="${url}" alt="QR Code" />
             `);
           });
-    
-          // Inicia o servidor na porta 3001
-          app.listen(3001, () => {
-            console.log('Servidor rodando em http://localhost:3000');
+  
+          // Marca que o QR Code foi gerado para não repetir
+          qrGenerated = true;
+  
+          // Inicia o servidor na porta 3000
+          const port = process.env.PORT || 3000;
+          app.listen(port, () => {
+            console.log(`Servidor rodando em http://localhost:${port} ou na URL do Render`);
           });
         }
       });
-});
+    }
+  });
 
 client.on('ready', () => {
-    console.log('Bot está pronto!');
+    console.log('WhatsApp Web está pronto!');
 });
 
 let agenda = '';
