@@ -35,7 +35,7 @@ export const getReadSheet = async (type: 'GOLS' | 'ASSISTENCIAS' | 'DESEMPENHO')
     console.log(response.data.values);
     let structuredData: string | undefined = '';
     if(type === 'DESEMPENHO') {
-      normalizeDesempenho(rows);
+      structuredData = normalizeDesempenho(rows);
     }
     if(type === 'GOLS' || type === 'ASSISTENCIAS') {
       structuredData = normalizeGolsAssistencias(rows, type);
@@ -46,4 +46,4 @@ export const getReadSheet = async (type: 'GOLS' | 'ASSISTENCIAS' | 'DESEMPENHO')
   }
 }
 
-console.log(getReadSheet('DESEMPENHO'));
+// console.log(getReadSheet('DESEMPENHO'));

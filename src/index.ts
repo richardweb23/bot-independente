@@ -50,7 +50,6 @@ let agenda = '';
 let agendaAtual = '';
 
 client.on('message_create', async (message) => {
-    console.log('message.fromMe', message.fromMe);
     // if (message.fromMe) return;
 
     const {body, from} = message;
@@ -64,8 +63,6 @@ client.on('message_create', async (message) => {
     if(verificaAgenda(body)) {
         agenda = converterTextoParaWhatsApp(body);
         agendaAtual = getAgendaAtual(body);
-        // console.log(agenda);
-        // message.reply(agenda);
         return;
     }
     if (body === '!artilharia') {
